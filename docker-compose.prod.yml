@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    text_analyzer_api:
+        image: text_analyzer_api
+        env_file:
+            - ./.env.prod
+        depends_on:
+        build:
+            context: .
+            dockerfile: ./dockerfiles/prod/Dockerfile
+        command: /start
+        ports:
+            - "${APP_PORT}:${APP_PORT}"
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "100m"
+                max-file: "20"
+        networks:
+            - text_analyzer_network
+        restart: always
+
+networks:
+    text_analyzer_network:
+    
