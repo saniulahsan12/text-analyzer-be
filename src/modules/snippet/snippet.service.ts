@@ -111,7 +111,7 @@ export class SnippetService {
           null,
           'RESPONSE_SNIPPET_CREATE_ERROR',
         ),
-        error?.status ?? HttpStatus.NOT_MODIFIED,
+        error?.status ?? HttpStatus.EXPECTATION_FAILED,
       );
     }
   }
