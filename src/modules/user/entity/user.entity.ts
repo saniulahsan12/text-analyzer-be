@@ -1,5 +1,6 @@
-import { Entity, Column, BeforeInsert } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Snippet } from 'src/modules/snippet/entity/snippet.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -22,4 +23,7 @@ export class User extends BaseEntity {
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
+
+  @OneToMany(() => Snippet, (snippet) => snippet.user)
+  snippets: Snippet[];
 }
