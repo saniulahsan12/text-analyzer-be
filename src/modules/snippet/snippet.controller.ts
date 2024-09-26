@@ -73,7 +73,7 @@ export class SnippetController {
   @ApiBearerAuth('JWT-auth')
   findWordCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
-      this.textAnalyzerService.countWords(snippetDto),
+      this.textAnalyzerService.countWords(snippetDto.snippet),
       'RESPONSE_WORD_COUNT',
     );
   }
@@ -83,7 +83,7 @@ export class SnippetController {
   @ApiBearerAuth('JWT-auth')
   findCharacterCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
-      this.textAnalyzerService.countCharacters(snippetDto),
+      this.textAnalyzerService.countCharacters(snippetDto.snippet),
       'RESPONSE_CHARACTER_COUNT',
     );
   }
@@ -93,7 +93,7 @@ export class SnippetController {
   @ApiBearerAuth('JWT-auth')
   findSentenceCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
-      this.textAnalyzerService.countSentences(snippetDto),
+      this.textAnalyzerService.countSentences(snippetDto.snippet),
       'RESPONSE_SENTENCE_COUNT',
     );
   }
@@ -103,7 +103,7 @@ export class SnippetController {
   @ApiBearerAuth('JWT-auth')
   findParagraphCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
-      this.textAnalyzerService.countParagraphs(snippetDto),
+      this.textAnalyzerService.countParagraphs(snippetDto.snippet),
       'RESPONSE_PARAGRAPH_COUNT',
     );
   }
@@ -113,7 +113,7 @@ export class SnippetController {
   @ApiBearerAuth('JWT-auth')
   findLongestWords(@Body() snippetDto: SnippetDTO): ResponseDTO<string[][]> {
     return this.utilService.getSuccessResponse(
-      this.textAnalyzerService.longestWordsInParagraphs(snippetDto),
+      this.textAnalyzerService.longestWordsInParagraphs(snippetDto.snippet),
       'RESPONSE_LONGEST_WORDS',
     );
   }

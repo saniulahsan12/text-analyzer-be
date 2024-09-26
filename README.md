@@ -22,13 +22,9 @@ $ docker-compose -f docker-compose.dev.yml --env-file .env.dev down
 
 ```bash
 # unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
+$ docker exec -ti text-analyzer-be-text_analyzer_api-1 bash -c 'npm run test'
 # test coverage
-$ npm run test:cov
+$ docker exec -ti text-analyzer-be-text_analyzer_api-1 bash -c 'npm run test:cov'
 ```
 
 ## 4. Build & Deploy for Production Server (Not needed)
