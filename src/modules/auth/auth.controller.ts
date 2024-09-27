@@ -53,14 +53,14 @@ export class AuthController {
     try {
       return this.utilService.getSuccessResponse(
         user,
-        'AUTH_RESPONSE_SUCCESS',
-        'AUTH_RESPONSE_SUCCESS',
+        'RESPONSE_AUTH_TOKEN_DECODE',
+        'RESPONSE_AUTH_TOKEN_DECODE',
       );
     } catch (err) {
       return this.utilService.getErrorResponse(
         err?.message,
-        'AUTH_RESPONSE_ERROR',
-        'AUTH_RESPONSE_ERROR',
+        'RESPONSE_AUTH_TOKEN_ERROR',
+        'RESPONSE_AUTH_TOKEN_ERROR',
       );
     }
   }

@@ -1,9 +1,10 @@
 import {
   ConflictException,
   ForbiddenException,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -60,11 +61,14 @@ export class AuthService {
     const { accessToken, refreshToken } = this.getTokens(payload);
 
     this.userService.updateRefreshToken(email, refreshToken);
-    return this.utilService.getSuccessResponse({
-      loggedIn: true,
-      accessToken,
-      refreshToken,
-    });
+    return this.utilService.getSuccessResponse(
+      {
+        loggedIn: true,
+        accessToken,
+        refreshToken,
+      },
+      'RESPONSE_LOGIN_SUCCESS',
+    );
   }
 
   getTokens(payload: any): { accessToken: string; refreshToken: string } {
@@ -115,13 +119,16 @@ export class AuthService {
     const tokens = this.getTokens(payload);
 
     await this.userService.updateRefreshToken(user.email, tokens.refreshToken);
-    return this.utilService.getSuccessResponse(tokens);
+    return this.utilService.getSuccessResponse(
+      tokens,
+      'RESPONSE_REFRESH_TOKEN_SUCCESS',
+    );
   }
 
   public async logout(requestDto: LogoutDto): Promise<ResponseDTO> {
     const { email } = requestDto;
     this.userService.updateRefreshToken(email, null);
-    return;
+    return this.utilService.getSuccessResponse(null, 'RESPONSE_LOGOUT_SUCCESS');
   }
 
   async registration(userDto: RegisterDTO): Promise<ResponseDTO> {
@@ -141,11 +148,17 @@ export class AuthService {
       if (result) {
         return this.utilService.getSuccessResponse(
           result,
-          'REGISTRATION_SUCCESS',
+          'RESPONSE_REGISTRATION_SUCCESS',
         );
       }
     } catch (error) {
-      throw new UnprocessableEntityException(error.message);
+      throw new HttpException(
+        this.utilService.getErrorResponse(
+          null,
+          'RESPONSE_USER_REGISTRATION_ERROR',
+        ),
+        error?.status ?? HttpStatus.EXPECTATION_FAILED,
+      );
     }
   }
 }
