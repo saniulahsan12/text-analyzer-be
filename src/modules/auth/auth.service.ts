@@ -12,12 +12,12 @@ import * as bcrypt from 'bcrypt';
 import { UtilService } from 'src/common/services/util.service';
 import { ResponseDTO } from 'src/common/dtos/response.dto';
 
-import { LoginDto, LogoutDto } from './dto/login-logout.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { LoginDTO, LogoutDTO } from './dto/login-logout.dto';
+import { RefreshTokenDTO } from './dto/refresh-token.dto';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entity/user.entity';
 import { RegisterDTO } from './dto/register.dto';
-import { LoginResponseDto } from './dto/login-response.dto';
+import { LoginResponseDTO } from './dto/login-response.dto';
 import { EBcrypt } from 'src/common/enums/bcrypt.enum';
 
 @Injectable()
@@ -37,8 +37,8 @@ export class AuthService {
     return null;
   }
 
-  async login(loginDto: LoginDto): Promise<ResponseDTO<LoginResponseDto>> {
-    const { email, password } = loginDto;
+  async login(LoginDTO: LoginDTO): Promise<ResponseDTO<LoginResponseDTO>> {
+    const { email, password } = LoginDTO;
 
     const user = await this.userService.findOneByEmail(email);
 
@@ -88,8 +88,8 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
-    const { email, refreshToken } = refreshTokenDto;
+  async refreshTokens(RefreshTokenDTO: RefreshTokenDTO) {
+    const { email, refreshToken } = RefreshTokenDTO;
 
     const refreshTokenMatches = this.jwtService.verify(refreshToken, {
       secret: this.configService.get('REFRESH_TOKEN_SECRET'),
@@ -125,7 +125,7 @@ export class AuthService {
     );
   }
 
-  public async logout(requestDto: LogoutDto): Promise<ResponseDTO> {
+  public async logout(requestDto: LogoutDTO): Promise<ResponseDTO> {
     const { email } = requestDto;
     this.userService.updateRefreshToken(email, null);
     return this.utilService.getSuccessResponse(null, 'RESPONSE_LOGOUT_SUCCESS');

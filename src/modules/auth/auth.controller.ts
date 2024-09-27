@@ -19,10 +19,10 @@ import { UtilService } from 'src/common/services/util.service';
 import { User } from 'src/common/decorators/user.decorator';
 
 import TokenVerificationPayload from './interface/token.verification.interface';
-import { LoginDto, LogoutDto } from './dto/login-logout.dto';
-import { LoginResponseDto } from './dto/login-response.dto';
+import { LoginDTO, LogoutDTO } from './dto/login-logout.dto';
+import { LoginResponseDTO } from './dto/login-response.dto';
 import { ResponseDTO } from 'src/common/dtos/response.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RefreshTokenDTO } from './dto/refresh-token.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDTO } from './dto/register.dto';
 import { UserDTO } from '../user/dto/user.dto';
@@ -39,10 +39,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiOperation({ summary: 'This endpoint is used for login' })
-  @ApiOkResponse({ type: LoginResponseDto, description: 'Login Successfully' })
-  @ApiBody({ type: LoginDto })
-  async login(@Body() loginDto: LoginDto): Promise<ResponseDTO> {
-    return await this.authService.login(loginDto);
+  @ApiOkResponse({ type: LoginResponseDTO, description: 'Login Successfully' })
+  @ApiBody({ type: LoginDTO })
+  async login(@Body() LoginDTO: LoginDTO): Promise<ResponseDTO> {
+    return await this.authService.login(LoginDTO);
   }
 
   @Get('profile')
@@ -71,10 +71,10 @@ export class AuthController {
   @ApiOkResponse({
     status: 200,
     description: 'Success',
-    type: RefreshTokenDto,
+    type: RefreshTokenDTO,
   })
-  refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshTokens(refreshTokenDto);
+  refreshTokens(@Body() RefreshTokenDTO: RefreshTokenDTO) {
+    return this.authService.refreshTokens(RefreshTokenDTO);
   }
 
   @Post('logout')
@@ -83,13 +83,13 @@ export class AuthController {
   @ApiOkResponse({
     status: 200,
     description: 'Logout Success',
-    type: LogoutDto,
+    type: LogoutDTO,
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
-  logout(@Body() logoutDto: LogoutDto): Promise<ResponseDTO> {
-    return this.authService.logout(logoutDto);
+  logout(@Body() LogoutDTO: LogoutDTO): Promise<ResponseDTO> {
+    return this.authService.logout(LogoutDTO);
   }
 
   @Post('register')
