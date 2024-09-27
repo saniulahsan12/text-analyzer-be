@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
-import { User } from 'src/modules/user/entity/user.entity';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { User } from '../../../modules/user/entity/user.entity';
 
 @Entity('snippets')
 export class Snippet extends BaseEntity {

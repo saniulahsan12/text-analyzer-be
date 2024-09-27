@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -14,13 +14,14 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Patch('/')
+  @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
   update(
-    @User() user: TokenVerificationPayload,
+    @User() authUser: TokenVerificationPayload,
+    @Param('id') id: number,
     @Body() updateUserDTO: UpdateUserDTO,
   ) {
-    return this.userService.update(user, updateUserDTO);
+    return this.userService.update(authUser, id, updateUserDTO);
   }
 }

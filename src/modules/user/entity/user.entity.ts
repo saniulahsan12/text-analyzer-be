@@ -1,6 +1,6 @@
 import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
-import { Snippet } from 'src/modules/snippet/entity/snippet.entity';
+import { BaseEntity } from '../../../common/entities/base.entity';
+import { Snippet } from '../../../modules/snippet/entity/snippet.entity';
 
 @Entity('users')
 export class User extends BaseEntity {

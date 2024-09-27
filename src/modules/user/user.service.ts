@@ -10,14 +10,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { UtilService } from 'src/common/services/util.service';
+import { UtilService } from '../../common/services/util.service';
 import { User } from './entity/user.entity';
 import TokenVerificationPayload from '../auth/interface/token.verification.interface';
 
 import { PickedUserDto, UserDTO } from './dto/user.dto';
-import { ResponseDTO } from 'src/common/dtos/response.dto';
+import { ResponseDTO } from '../../common/dtos/response.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
-import { EBcrypt } from 'src/common/enums/bcrypt.enum';
+import { EBcrypt } from '../../common/enums/bcrypt.enum';
 
 @Injectable()
 export class UserService {
@@ -83,20 +83,23 @@ export class UserService {
 
   async update(
     authUser: TokenVerificationPayload,
+    id: number,
     updateUserDTO: UpdateUserDTO,
   ): Promise<ResponseDTO> {
     try {
-      updateUserDTO['password'] = await bcrypt.hash(
-        updateUserDTO['password'],
-        EBcrypt.SALT_OR_ROUND,
-      );;
-      await this.userRepository.update(
-        { id: authUser.id },
-        { ...updateUserDTO, updated_by: authUser.id, },
-      );
+      if (updateUserDTO['password']) {
+        updateUserDTO['password'] = await bcrypt.hash(
+          updateUserDTO['password'],
+          EBcrypt.SALT_OR_ROUND,
+        );
+      }
+      await this.userRepository.update(id, {
+        ...updateUserDTO,
+        updated_by: authUser.id,
+      });
       const user = await this.userRepository.findOne({
         where: {
-          id: authUser.id,
+          id,
         },
       });
       delete user.password;
@@ -105,7 +108,7 @@ export class UserService {
     } catch (error) {
       throw new HttpException(
         this.utilService.getErrorResponse(null, 'RESPONSE_USER_UPDATE_ERROR'),
-        error?.status ?? HttpStatus.NOT_MODIFIED,
+        error?.status ?? HttpStatus.EXPECTATION_FAILED,
       );
     }
   }
