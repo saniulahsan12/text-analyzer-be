@@ -9,8 +9,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UtilService } from 'src/common/services/util.service';
-import { ResponseDTO } from 'src/common/dtos/response.dto';
+import { UtilService } from '../../common/services/util.service';
+import { ResponseDTO } from '../../common/dtos/response.dto';
 
 import { LoginDTO, LogoutDTO } from './dto/login-logout.dto';
 import { RefreshTokenDTO } from './dto/refresh-token.dto';
@@ -18,7 +18,7 @@ import { UserService } from '../user/user.service';
 import { User } from '../user/entity/user.entity';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginResponseDTO } from './dto/login-response.dto';
-import { EBcrypt } from 'src/common/enums/bcrypt.enum';
+import { EBcrypt } from '../../common/enums/bcrypt.enum';
 
 @Injectable()
 export class AuthService {
@@ -142,6 +142,7 @@ export class AuthService {
         userDto.password,
         EBcrypt.SALT_OR_ROUND,
       );
+      userDto.email = userDto.email.toLowerCase();
       const result = await this.userService.register(userDto);
       delete result.password;
       delete result.refresh_token;

@@ -24,7 +24,7 @@ describe('UserService', () => {
   const basePayload = {
     first_name: 'TestFName',
     last_name: 'TestLName',
-    email: 'test@test.com'
+    email: 'test@test.com',
   };
 
   const user = {

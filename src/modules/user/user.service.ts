@@ -93,6 +93,9 @@ export class UserService {
           EBcrypt.SALT_OR_ROUND,
         );
       }
+      if (updateUserDTO['email']) {
+        updateUserDTO.email = updateUserDTO.email.toLowerCase();
+      }
       await this.userRepository.update(id, {
         ...updateUserDTO,
         updated_by: authUser.id,

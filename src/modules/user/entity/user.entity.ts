@@ -19,11 +19,6 @@ export class User extends BaseEntity {
   @Column({ type: 'longtext', nullable: true })
   refresh_token: string;
 
-  @BeforeInsert()
-  emailToLowerCase() {
-    this.email = this.email.toLowerCase();
-  }
-
   @OneToMany(() => Snippet, (snippet) => snippet.user)
-  snippets: Snippet[];
+  snippets?: Snippet[];
 }
