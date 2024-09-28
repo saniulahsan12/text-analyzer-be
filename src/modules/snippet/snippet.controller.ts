@@ -8,7 +8,9 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'typeorm';
 
@@ -25,6 +27,7 @@ import { UtilService } from 'src/common/services/util.service';
 @Controller('snippets')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
+@UseInterceptors(CacheInterceptor)
 export class SnippetController {
   constructor(
     private readonly snippetService: SnippetService,

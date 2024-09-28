@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { CacheModule } from '@nestjs/cache-manager';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
@@ -13,7 +13,7 @@ import { SnippetModule } from './modules/snippet/snippet.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-
+    CacheModule.register(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
