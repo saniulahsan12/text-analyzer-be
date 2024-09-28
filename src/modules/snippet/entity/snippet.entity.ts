@@ -10,4 +10,7 @@ export class Snippet extends BaseEntity {
   @ManyToOne(() => User, (user) => user.snippets)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ nullable: true })
+  user_id: number;
 }

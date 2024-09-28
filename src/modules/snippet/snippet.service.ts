@@ -16,14 +16,41 @@ export class SnippetService {
     private utilService: UtilService,
   ) {}
 
-  async findOneById(id: number): Promise<ResponseDTO<Snippet>> {
+  async findOneById(
+    authUser: TokenVerificationPayload,
+    id: number,
+  ): Promise<ResponseDTO<Snippet>> {
     try {
-      const snippet = await this.snippetRepository.findOne({ where: { id } });
+      const snippet = await this.snippetRepository.findOne({
+        where: { id, user_id: authUser.id },
+      });
       return this.utilService.getSuccessResponse(snippet, 'RESPONSE_SNIPPET');
     } catch (error) {
       throw new HttpException(
         this.utilService.getErrorResponse(null, 'RESPONSE_SNIPPET_READ_ERROR'),
         error?.status ?? HttpStatus.NOT_MODIFIED,
+      );
+    }
+  }
+
+  async findAll(
+    authUser: TokenVerificationPayload,
+  ): Promise<ResponseDTO<Snippet>> {
+    try {
+      const snippets = await this.snippetRepository.find({
+        where: { user_id: authUser.id },
+      });
+      return this.utilService.getSuccessResponse(
+        snippets,
+        'RESPONSE_SNIPPET_ALL',
+      );
+    } catch (error) {
+      throw new HttpException(
+        this.utilService.getErrorResponse(
+          null,
+          'RESPONSE_SNIPPET_ALL_READ_ERROR',
+        ),
+        error?.status ?? HttpStatus.NOT_FOUND,
       );
     }
   }
@@ -63,6 +90,7 @@ export class SnippetService {
     try {
       const snippet = await this.snippetRepository.save({
         ...snippetDto,
+        user: authUser,
         user_id: authUser.id,
         created_by: authUser.id,
       });
@@ -92,6 +120,7 @@ export class SnippetService {
         {
           ...updateSnippetDto,
           updated_by: authUser.id,
+          user: authUser,
           updated_at: new Date(),
         },
       );

@@ -23,6 +23,8 @@ import { UtilService } from 'src/common/services/util.service';
 
 @ApiTags('Snippets')
 @Controller('snippets')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
 export class SnippetController {
   constructor(
     private readonly snippetService: SnippetService,
@@ -30,16 +32,22 @@ export class SnippetController {
     private readonly utilService: UtilService,
   ) {}
 
+  @Get()
+  getAll(
+    @User() authUser: TokenVerificationPayload,
+  ): Promise<ResponseDTO<Snippet>> {
+    return this.snippetService.findAll(authUser);
+  }
+
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
-  get(@Param('id') id: number): Promise<ResponseDTO<Snippet>> {
-    return this.snippetService.findOneById(id);
+  get(
+    @User() authUser: TokenVerificationPayload,
+    @Param('id') id: number,
+  ): Promise<ResponseDTO<Snippet>> {
+    return this.snippetService.findOneById(authUser, id);
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   post(
     @User() authUser: TokenVerificationPayload,
     @Body() snippetDto: SnippetDTO,
@@ -48,8 +56,6 @@ export class SnippetController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   update(
     @User() authUser: TokenVerificationPayload,
     @Param('id') id: number,
@@ -59,8 +65,6 @@ export class SnippetController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   delete(
     @User() authUser: TokenVerificationPayload,
     @Param('id') id: number,
@@ -69,8 +73,6 @@ export class SnippetController {
   }
 
   @Post('word-count')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   findWordCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
       this.textAnalyzerService.countWords(snippetDto.snippet),
@@ -79,8 +81,6 @@ export class SnippetController {
   }
 
   @Post('character-count')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   findCharacterCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
       this.textAnalyzerService.countCharacters(snippetDto.snippet),
@@ -89,8 +89,6 @@ export class SnippetController {
   }
 
   @Post('sentence-count')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   findSentenceCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
       this.textAnalyzerService.countSentences(snippetDto.snippet),
@@ -99,8 +97,6 @@ export class SnippetController {
   }
 
   @Post('pragraph-count')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   findParagraphCounts(@Body() snippetDto: SnippetDTO): ResponseDTO<number> {
     return this.utilService.getSuccessResponse(
       this.textAnalyzerService.countParagraphs(snippetDto.snippet),
@@ -109,8 +105,6 @@ export class SnippetController {
   }
 
   @Post('longest-words')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('JWT-auth')
   findLongestWords(@Body() snippetDto: SnippetDTO): ResponseDTO<string[][]> {
     return this.utilService.getSuccessResponse(
       this.textAnalyzerService.longestWordsInParagraphs(snippetDto.snippet),

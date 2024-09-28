@@ -7,6 +7,7 @@ http://localhost:3313/docs
 * Generate access token and save in swagger
 * Create a paragraph
 * Run the other API's for the analyze
+* Optional: if you want to access database can visit: http://localhost:8080/ [u/p : admin/admin]
 
 ## 2. Running Application on Dev Mode
 
