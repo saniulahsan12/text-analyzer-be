@@ -111,4 +111,30 @@ export class SnippetController {
       'RESPONSE_LONGEST_WORDS',
     );
   }
+  @Post('analyze-all')
+  analyze(@Body() snippetDto: SnippetDTO): ResponseDTO<{
+    count_words: number;
+    count_characters: number;
+    count_sentences: number;
+    count_paragraphs: number;
+    longest_word_in_paragraphs: string[][];
+  }> {
+    return this.utilService.getSuccessResponse(
+      {
+        count_words: this.textAnalyzerService.countWords(snippetDto.snippet),
+        count_characters: this.textAnalyzerService.countCharacters(
+          snippetDto.snippet,
+        ),
+        count_sentences: this.textAnalyzerService.countSentences(
+          snippetDto.snippet,
+        ),
+        count_paragraphs: this.textAnalyzerService.countParagraphs(
+          snippetDto.snippet,
+        ),
+        longest_word_in_paragraphs:
+          this.textAnalyzerService.longestWordsInParagraphs(snippetDto.snippet),
+      },
+      'RESPONSE_ANALYZE_ALL',
+    );
+  }
 }
